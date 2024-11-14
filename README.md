@@ -17,7 +17,7 @@ Built with **Neo4j** for graph database support and **LangChain** for intelligen
 
 ## Technologies Used
 - **Neo4j**: A graph database for storing and querying coffee blends, tasting notes, and roast types.
-- **LangChain**: Handles natural language queries with Cypher QA Chain, allowing both structured and unstructured questions.
+- **LangChain**: Handles natural language queries with GraphCypherQAChain, allowing both structured and unstructured questions.
 - **OpenAI Embeddings**: Provides vector embeddings for descriptions, enabling the similarity-based recommendation system.
 
 ## Example Queries
