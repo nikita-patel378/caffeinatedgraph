@@ -30,3 +30,9 @@ Grounds & Hounds Coffee Co. is a brand I truly enjoy, not only for their delicio
 
 ## License
 This project is part of my portfolio and is intended solely for demonstration purposes. 
+
+### Important Notes
+
+- **Credentials**: All credentials have been omitted for security purposes.
+- **Data**: The repository does not include any scraped or proprietary data from Grounds & Hounds Coffee Co., out of respect for their brand and intellectual property.
+
