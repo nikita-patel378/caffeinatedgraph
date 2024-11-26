@@ -32,9 +32,6 @@ This is the graph model showing the relationships between coffee blends, roast t
 2. **Find blends by tasting note**: "What coffee blends have vanilla notes?"
 3. **Search by roast type**: "Show me all coffee blends that are light roast."
 
-## Why Grounds & Hounds Coffee Co.?
-Grounds & Hounds Coffee Co. is a brand I truly enjoy, not only for their delicious coffee but also for their mission to support animal rescue organizations. This project is my way of exploring their products in a more structured, interactive way, helping me choose my next blend with a little help from data and AI.
-
 ## License
 This project is part of my portfolio and is intended solely for demonstration purposes. 
 
