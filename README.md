@@ -10,7 +10,7 @@ Built with **Neo4j** for graph database support and **LangChain** for intelligen
 
 This is the graph model showing the relationships between coffee blends, roast types, and tasting notes.
 
-![Graph Model](coffeegraph.png)
+![Graph Model](coffeemodelgraph.png)
 
 
 ## Features
