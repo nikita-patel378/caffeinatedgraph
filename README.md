@@ -6,6 +6,13 @@ As a huge fan of Grounds & Hounds Coffee Co., I wanted a unique way to explore t
 
 Built with **Neo4j** for graph database support and **LangChain** for intelligent querying, this project leverages vector similarity and structured queries to make personalized recommendations.
 
+## Coffee Blend Graph Model
+
+This is the graph model showing the relationships between coffee blends, roast types, and tasting notes.
+
+![Graph Model](graph.png)
+
+
 ## Features
 - **Coffee Blend Recommendations**: Uses vector similarity indexing to recommend coffee blends similar to ones you’ve tried before.
 - **Tasting Notes and Roast Type Queries**: Natural language queries let you search for blends by specific tasting notes (like chocolate, vanilla) or roast types (light, medium, dark).
