@@ -1,0 +1,97 @@
+import neo4j
+from neo4j_graphrag.llm import OpenAILLM as LLM
+from neo4j_graphrag.embeddings.openai import OpenAIEmbeddings as Embeddings
+from neo4j_graphrag.retrievers import VectorRetriever
+from neo4j_graphrag.retrievers import Text2CypherRetriever
+from neo4j_graphrag.generation.graphrag import GraphRAG
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv(dotenv_path='dot.env')
+
+# Retrieve credentials from environment variables
+api_key = os.getenv("OPENAI_API_KEY")
+neo4j_url = os.getenv("NEO4J_URL")
+neo4j_username = os.getenv("NEO4J_USERNAME")
+neo4j_password = os.getenv("NEO4J_PASSWORD")
+
+neo4j_driver = neo4j.GraphDatabase.driver(neo4j_url,
+                                          auth=(neo4j_username, neo4j_password))
+
+ex_llm = LLM(
+    model_name="gpt-4o-mini",
+    model_params={
+        "response_format": {"type": "json_object"},
+        "temperature": 0
+    })
+
+embedder = Embeddings()
+
+# the vector embeddings and index are already set up so skipping those steps
+# but from neo4j_graphrag.indexes import create_vector_index would be the approach to create a vector index with
+# the graphrag library
+
+
+# KG Retriever
+vector_retriever = VectorRetriever(
+    neo4j_driver,
+    index_name="embedding_index",
+    embedder=embedder
+)
+
+# GraphRAG Class
+
+llm = LLM(model_name="gpt-4o")
+rag = GraphRAG(llm=llm, retriever=vector_retriever)
+
+# Run the vector search
+
+response = rag.search("What coffee blends are similar to Alpha Blend Dark Roast?")
+print(response.answer)
+
+# okay now for the tasting notes and roast type questions
+
+llm = LLM(model_name="gpt-4o", model_params={"temperature": 0.0})
+
+# Define the Neo4j schema
+neo4j_schema = """
+(:CoffeeBlend)-[:HAS_TASTING_NOTE]->(:TastingNote)
+(:CoffeeBlend)-[:HAS_ROAST]->(:Roast)
+"""
+
+# The examples for questions we want answered
+examples = [
+    """User Input: What coffee blends have vanilla notes?
+       Query:
+       MATCH (c:CoffeeBlend)-[:HAS_TASTING_NOTE]->(t:TastingNote)
+       WHERE toLower(t.name) CONTAINS toLower($tasting_note)
+       WITH c 
+       MATCH (c)-[:HAS_TASTING_NOTE]->(all_notes)
+       RETURN c.name AS CoffeeBlend, collect(all_notes.name) AS TastingNotes;""",
+
+    """User Input: Show me all coffee blends that are light roast.
+       Query:
+       MATCH (c:CoffeeBlend)-[:HAS_ROAST]->(r:Roast)
+       WHERE r.name CONTAINS $roast_type OR 
+             ($roast_type = 'Light' AND r.name CONTAINS 'Medium-Light')
+       RETURN c.name AS CoffeeBlend, r.name AS Roast;"""
+]
+
+# Initialize the retriever
+cypher_retriever = Text2CypherRetriever(
+    driver=neo4j_driver,
+    llm=llm,
+    neo4j_schema=neo4j_schema,
+    examples=examples
+)
+
+# Example queries to test
+query_1 = "What coffee blends have vanilla notes?"
+query_2 = "Show me all coffee blends that are light roast."
+
+result_1 = cypher_retriever.search(query_text=query_1)
+result_2 = cypher_retriever.search(query_text=query_2)
+
+print("Results for notes query:", result_1)
+print("Results for roast query:", result_2)
