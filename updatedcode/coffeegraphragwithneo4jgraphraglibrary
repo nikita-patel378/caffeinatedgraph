@@ -19,13 +19,6 @@ neo4j_password = os.getenv("NEO4J_PASSWORD")
 neo4j_driver = neo4j.GraphDatabase.driver(neo4j_url,
                                           auth=(neo4j_username, neo4j_password))
 
-ex_llm = LLM(
-    model_name="gpt-4o-mini",
-    model_params={
-        "response_format": {"type": "json_object"},
-        "temperature": 0
-    })
-
 embedder = Embeddings()
 
 # the vector embeddings and index are already set up so skipping those steps
